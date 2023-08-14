@@ -4,6 +4,6 @@
 target
 **/*.rs.bk
 node_modules
-SDK/test.ts
+uberMMSDK/test.ts
 test-ledger
 .yarn
