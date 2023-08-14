@@ -125,6 +125,7 @@ export class UberMmSDK {
         
 
         for(let i = 0; i < txNumber; i++){
+            let timeStart = Date.now();
             try {
                 const tx = await this.program.methods
                   .updateQuotes(
@@ -167,7 +168,9 @@ export class UberMmSDK {
                   console.log("BaseBalance:", baseBalance, "QuoteBalance: ", quoteBalance);
                 }
             } catch(e){console.log(e)}
-            await new Promise((r) => setTimeout(r, txInterval));
+            let timeSpent = Date.now() - timeStart;
+            let waitTime = Math.max(0, txInterval - timeSpent);
+            await new Promise((r) => setTimeout(r, waitTime));
         }
         let cancelOrdersTx = phoenixMarket.createCancelAllOrdersInstruction(this.wallet.publicKey);
         console.log("canceling all orders tx: ", await sendAndConfirmTransaction(this.connection, new Transaction().add(cancelOrdersTx), [this.wallet]));
